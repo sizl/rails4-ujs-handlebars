@@ -1,5 +1,29 @@
 <h1>Listing products</h1>
 
+<%= form_for(@product, remote: true, format: :json) do |f| %>
+  <% if @product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+        <% @product.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div><%= f.text_field :name, placeholder: "Product Name" %></div>
+  <div><%= f.text_field :price, placeholder: "Price" %></div>
+  <div><label><%= f.check_box :available %> available ?</label></div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+
 <table>
   <thead>
     <tr>
@@ -10,22 +34,26 @@
     </tr>
   </thead>
 
-  <tbody>
-    <% @products.each do |product| %>
-      <tr>
-        <td><%= product.name %></td>
-        <td><%= product.price %></td>
-        <td><%= product.available %></td>
-        <td>
-          <%= link_to 'Show', product %>
-          <%= link_to 'Edit', edit_product_path(product) %>
-          <%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %>
-        </td>
-      </tr>
-    <% end %>
+  <tbody id="product-rows">
+
   </tbody>
 </table>
 
 <br>
 
+<script id="product-row-template" type="x-handlebars-template">
+  {{#each products}}
+    <tr>
+      <td>{{name}}</td>
+      <td>{{price}}</td>
+      <td>{{available}}</td>
+    </tr>
+  {{/each}}
+</script>
+
 <%= link_to 'New Product', new_product_path %>
+
+
+<% @document_ready = capture do %>
+NMR.product.init();
+<% end %>

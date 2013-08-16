@@ -10,5 +10,12 @@
 
 <%= yield %>
 
+<script type="text/javascript">
+  $(document).ready(function(){
+    NMR.init();
+    <%= @document_ready %>
+  });
+</script>
+
 </body>
 </html>
